@@ -35,7 +35,7 @@
 
      Get-EventLog -LogName Security -Newest 10  
 
-<h3> 🐧 **Linux: Enable Logging for Security Events**  
+<h2> 🐧 Linux: Enable Logging for Security Events  </h2>
 
 📌 **Monitor SSH Login Attempts**  
 
@@ -50,7 +50,7 @@
     sudo lastb  
 
 ✅ **These logs help detect failed logins, privilege escalation, and file tampering. **  
-
+</br>
  
 <h2> 🛠 Step 2: Deploy an Intrustion Detection System (IDS) </h2>  
 
@@ -70,9 +70,10 @@
       sudo cat /var/log/fail2ban.log  
 
  ✅ **This blocks brute-force attacks on SSH logins.**  
+</br>  
 
    
-<h2>🛠 Step 3: Detect & Respond to Security Incidents </h2>  
+<h2>🛠 Step 3: Detect & Respond to Security Incidents </h2>    
   
 <h3> 🔹 Simulate an Incident & Investigate Logs </h3>  
 
@@ -95,75 +96,58 @@
        
  <h2>Scenario 2: Unauthorized File Modification (Malware or Insider Threat) </h2>  
   
-  🔧 Tasks:  
-  1. **Run a Compliance Scan (NIST, CIS Benchmarks)**
+  📌 **Modify `/etc/passwd` file (simulate an attack):**  
+
+       sudo echo "malicious_user:x:1002:1002::/home/malicious:/bin/bash" >> /etc/passwd  
+
+  📌 **Detect unauthorized modification with audit logs: **  
+
+       sudo ausearch -f /etc/passwd    
   
-         sudo apt install lynis -y
-         sudo lynis audit system  
-  - This will generate a **security report** based on NIST controls.
+ 📌 **Revert the change & investigate: **  
+
+       sudo vi /etc/passwd  
   
-  2. **Set Up Basic Firewall Rules (UFW)**
+✅ **These simulations help you practice forensic analysis!**  
+</br>
 
-         sudo ufw enable
-         sudo ufw allow OpenSSH
-         sudo ufw allow 443/tcp
-         sudo ufw status verbose
-  - This ensures only secure traffic is allowed.  
-
-<h2>🛠 Step 5: Compliance Validation & Reporting  <br/>  
-     
-🔹 Generate a Compliance Report  </h2>  
   
- 1. **Windows: Check compliance settings**  
+<h2> 🛠 Step 4: Create an Incident Response Plan (IRP) </h2>  
+
+ 📌 Use the **SANS 6-Step Incident Response Process **  
   
-        Get-GPOReport -All -ReportType HTML -Path C:\GPO_Report.html
-    - This exports a **Group Policy** compliance report.
+ | Phase | Actions Taken | 
+ | ----- | ------------- | 
+ | 1. Preparation | Set up logging, IDS, and response tools | 
+ | 2. Identification | Review logs for suspicious activity | 
+ | 3. Containment | Block IPs, isolate infected systems | 
+ | 4. Eradication | Remove malware, revoke compromised credentials | 
+ | 5. Recovery | Restores systems, ensure no persistence | 
+ | 6. Lessons Learned | Update security controls based on findings | 
   
-2. *Linux: Review Lynis Report**
-
-       cat /var/log/lynis-report.dat
-    - Look for **security misconfigurations**
-
-3. **Analyze Security Logs with Splunk/Wazuh**
-    - If you set up **Splunk**, create a **dashboard** to track compliance events.
-
-<h2>🛠 Step 6: Write a Compliance Summary Report</h2>  
-
-🎯 Your Deliverable: A **1-Page Compliance Report** summarizing:  
-
-✅ Controls Implemented  
-✅ Findings from Compliance Tools  
-✅ Areas for Improvement  
-✅ Next Steps  
-
-<h3> 📄 Example Summary: </h3>  
-
-**Security Compliance Report - NIST CSF Implementation in Home Lab**  
-**Date:** \[Your Date]  
-**Compliance Framework:** NIST Cybersecurity Framework (CSF) 
-
-<h3> 🔹 Summary of Controls Implemented </h3>  
-
-✅ Access Control (Windows & Linux GPOs) → PROTECT  
-✅ Security Logging Enabled (Splunk/Wazuh) → DETECT  
-✅ Firewall Rules (UFW, pfSense) → PROTECT  
-✅ Audit Logs Reviewed → DETECT & RESPOND  
-
-<h3> 🔹 Findings </h3>  
-
-📌 **Windows Server Compliance Scan**: Passed 8/10 controls (Weak password policy detected)  
-📌 **Linux Security Audit (Lynis)**: Hardening score 85/100 (Need SSH restriction improvement)  
-📌 **Splunk Logs**: Detected 3 failed login attempts (Possible brute force)  
+</br>  
   
-<h3> 🔹 Areas for Improvement </h3>  
+<h2> 📝 Sample Incident Response Report  </h2>  
 
-  - Enforce **MFA** for **Windows Login**  
-  - Implement **automatic remidiation scripts** for failed login detection
+**Incident Report - Unauthorized SSH Login Attempt**  
+**Date:** \[2/16/2025]  
+**Detected By:** Fail2Ban IDS  
+**Incident Type:** Brute-force attack  
+**Indicators of Compromise (IoC): **  
+  - Repeated failed login attempts from IP `192.168.1.10`
+  - SSH logs show `Failed password for root from 192.168.1.10`
+  
+<h3> 🔹 Actions Taken </h3>  
 
-<h3> 🔹 Next Steps </h3>  
-
-   1. Set up **Automated Compliance Monitoring** (e.g., Wazuh SIEM rules)
-   2. Perform **Continuous Auditing** (Scheduled CIS Benchmark scans)
+✅ **Blocked IP using firewall**  
+✅ **Reviewed logs for further suspicious activity**  
+✅ **Changed root password & enforced 2FA**  
+  
+<h3> 🔹 Next Steps </h3>   
+  
+   - Implement **automated threat detection**    
+   - Enforce **account lockout policies**  
+   - Conduct **team security awareness training**  
 
   
 
